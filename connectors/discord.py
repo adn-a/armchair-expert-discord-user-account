@@ -77,18 +77,8 @@ class DiscordClient(discord.Client):
                 reply = self._worker.recv()
                 self._logger.debug("Reply: %s" % reply)
                 if reply is not None:
-                    await self.send_message(message.channel, reply)
+                    await message.channel.send(reply)
                 return
-
-        # Reply to private messages
-        if message.guild is None:
-            self._logger.debug("Private Message: %s" % filtered_content)
-            self._worker.send(ConnectorRecvMessage(filtered_content))
-            reply = self._worker.recv()
-            self._logger.debug("Reply: %s" % reply)
-            if reply is not None:
-                await self.send_message(message.channel, reply)
-            return
 
 
 class DiscordWorker(ConnectorWorker):
